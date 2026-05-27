@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pulse & Patch AI | Everyday Health Decoder</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts: Plus Jakarta Sans for clean, modern readability -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Top Minimal Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">
+                <span class="pulse-dot"></span>
+                <strong>Pulse & Patch</strong> <span class="sub-logo">AI</span>
+            </div>
+            <div class="status-badge" id="engine-status">
+                <span class="status-dot green"></span> Local Engine Active
+            </div>
+            <button class="settings-trigger-btn" id="open-settings-btn" title="API Settings">
+                ⚙️ Settings
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="container">
+        <!-- Welcoming Header -->
+        <header class="header">
+            <h1>Everyday Health <span>Decoder</span></h1>
+            <p>Translate confusing lab values and daily symptoms into clear, reassuring, and practical home-care advice.</p>
+        </header>
+
+        <!-- Dynamic Content Layout -->
+        <div class="app-layout">
+            <!-- Left Column: Intake & Vault -->
+            <div class="left-column">
+                <!-- Left Intake Console -->
+                <section class="intake-panel card">
+                    <!-- Tab Switching Headers -->
+                    <div class="tab-headers">
+                        <button class="tab-btn active" id="tab-symptoms-btn">
+                            🩹 Symptom Care Planner
+                        </button>
+                        <button class="tab-btn" id="tab-labs-btn">
+                            📊 Lab Report Decoder
+                        </button>
+                    </div>
+
+                    <!-- Tab 1: Symptoms Planner Content -->
+                    <div class="tab-content" id="symptoms-content">
+                        <div class="input-group">
+                            <label for="symptom-input">Describe daily symptoms or health concerns</label>
+                            <textarea id="symptom-input" placeholder="e.g., 'I have had a mild runny nose and cough for 2 days. No fever, but sleeping a bit more than usual...'"></textarea>
+                        </div>
+
+                        <!-- Quick Tag Selectors -->
+                        <div class="quick-tags-container">
+                            <span class="tag-label">Click to quick-add symptoms:</span>
+                            <div class="tags-grid">
+                                <button class="tag" data-value="Mild Fever">Mild Fever</button>
+                                <button class="tag" data-value="Dull Headache">Dull Headache</button>
+                                <button class="tag" data-value="Runny Nose">Runny Nose</button>
+                                <button class="tag" data-value="Dry Cough">Dry Cough</button>
+                                <button class="tag" data-value="Sore Throat">Sore Throat</button>
+                                <button class="tag" data-value="Fatigue / Tiredness">Fatigue</button>
+                                <button class="tag" data-value="Mild Nausea">Nausea</button>
+                                <button class="tag" data-value="Dehydration">Dehydration</button>
+                            </div>
+                        </div>
+
+                        <button class="action-btn" id="analyze-symptoms-btn">
+                            <span class="btn-text">Generate Home Care Plan</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                    </div>
+
+                    <!-- Tab 2: Lab Decoder Content (Form fields) -->
+                    <div class="tab-content hidden" id="labs-content">
+                        <div class="input-group">
+                            <label for="lab-type-select">Select Lab Test Type</label>
+                            <select id="lab-type-select">
+                                <option value="cbc">Complete Blood Count (CBC)</option>
+                                <option value="lipid">Lipid / Cholesterol Panel</option>
+                                <option value="thyroid">Thyroid Panel (TSH)</option>
+                            </select>
+                        </div>
+
+                        <!-- CBC Dynamic Form Fields -->
+                        <div class="lab-fields-group" id="fields-cbc">
+                            <p class="fields-intro">Input values from your lab result sheet:</p>
+                            <div class="fields-grid">
+                                <div class="field-item">
+                                    <label for="cbc-hb">Hemoglobin (g/dL)</label>
+                                    <input type="number" id="cbc-hb" step="0.1" placeholder="Normal: 12.0 - 17.5">
+                                </div>
+                                <div class="field-item">
+                                    <label for="cbc-wbc">White Blood Cells (x10³/µL)</label>
+                                    <input type="number" id="cbc-wbc" step="0.1" placeholder="Normal: 4.5 - 11.0">
+                                </div>
+                                <div class="field-item">
+                                    <label for="cbc-plt">Platelets (x10³/µL)</label>
+                                    <input type="number" id="cbc-plt" step="1" placeholder="Normal: 150 - 450">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lipid Dynamic Form Fields -->
+                        <div class="lab-fields-group hidden" id="fields-lipid">
+                            <p class="fields-intro">Input values from your cholesterol lipid sheet:</p>
+                            <div class="fields-grid">
+                                <div class="field-item">
+                                    <label for="lipid-tc">Total Cholesterol (mg/dL)</label>
+                                    <input type="number" id="lipid-tc" step="1" placeholder="Normal: < 200">
+                                </div>
+                                <div class="field-item">
+                                    <label for="lipid-ldl">LDL (Bad Cholesterol)</label>
+                                    <input type="number" id="lipid-ldl" step="1" placeholder="Normal: < 100">
+                                </div>
+                                <div class="field-item">
+                                    <label for="lipid-hdl">HDL (Good Cholesterol)</label>
+                                    <input type="number" id="lipid-hdl" step="1" placeholder="Normal: > 40">
+                                </div>
+                                <div class="field-item">
+                                    <label for="lipid-tg">Triglycerides (mg/dL)</label>
+                                    <input type="number" id="lipid-tg" step="1" placeholder="Normal: < 150">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Thyroid Dynamic Form Fields -->
+                        <div class="lab-fields-group hidden" id="fields-thyroid">
+                            <p class="fields-intro">Input values from your thyroid panel sheet:</p>
+                            <div class="fields-grid">
+                                <div class="field-item">
+                                    <label for="thyroid-tsh">TSH (uIU/mL)</label>
+                                    <input type="number" id="thyroid-tsh" step="0.01" placeholder="Normal: 0.40 - 4.50">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="action-btn" id="analyze-labs-btn">
+                            <span class="btn-text">Decode Lab Values</span>
+                            <div class="spinner hidden"></div>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Saved Records Vault Card -->
+                <section class="card vault-panel" id="vault-card">
+                    <div class="vault-header">
+                        <div class="vault-title-group">
+                            <span class="vault-icon">📁</span>
+                            <h3>Saved Records Vault</h3>
+                        </div>
+                        <span class="vault-count-badge" id="vault-count">0 records</span>
+                    </div>
+                    <div class="vault-list" id="vault-list">
+                        <!-- Populated dynamically via JS -->
+                        <div class="vault-empty">
+                            No saved records yet. Your completed decodes will be stored locally here.
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right Clinical Output Canvas -->
+            <section class="output-panel card" id="report-canvas">
+                <!-- Empty Welcome State -->
+                <div class="empty-state" id="report-empty">
+                    <div class="empty-icon">🍃</div>
+                    <h3>Case Translator Idle</h3>
+                    <p>Provide details or input lab numbers on the left, then click analyze to synthesize your easy-to-read wellness letter.</p>
+                </div>
+
+                <!-- Beautiful Active Report Card -->
+                <div class="report-content hidden" id="report-active">
+                    <div class="report-header">
+                        <div class="report-badge" id="report-category-badge">Symptom Guide</div>
+                        <div class="report-timestamp" id="report-date">Just Now</div>
+                    </div>
+
+                    <!-- Core Report Output -->
+                    <div class="report-body" id="report-html-output">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+
+                    <!-- Footer Action Items -->
+                    <div class="report-footer">
+                        <button class="util-btn" id="print-report-btn">
+                            🖨️ Print / Save PDF
+                        </button>
+                        <button class="util-btn secondary" id="clear-report-btn">
+                            Reset Form
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Simple, Clean Settings Slider Modal -->
+    <div class="modal-overlay hidden" id="settings-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Settings & API Vault</h3>
+                <button class="close-btn" id="close-settings-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="settings-desc">To unlock real AI processing, paste a free Gemini API key below. If left blank, the app will run locally and securely using our built-in offline medical dictionary.</p>
+                
+                <div class="input-group">
+                    <label for="settings-api-key">Gemini API Key</label>
+                    <input type="password" id="settings-api-key" placeholder="AIzaSy...">
+                    <span class="help-text">Your key remains securely in your browser's private localStorage.</span>
+                </div>
+
+                <div class="api-helper-box">
+                    <strong>💡 How to get a free API Key:</strong>
+                    <ol>
+                        <li>Visit <a href="https://aistudio.google.com/" target="_blank" rel="noopener">Google AI Studio</a></li>
+                        <li>Log in with your standard Gmail account.</li>
+                        <li>Click <strong>"Get API Key"</strong> $\rightarrow$ <strong>"Create API Key"</strong>.</li>
+                        <li>Copy and paste it here!</li>
+                    </ol>
+                </div>
+
+                <button class="save-btn" id="save-settings-btn">Save Key & Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JS file -->
+    <script src="app.js"></script>
+</body>
+</html>
